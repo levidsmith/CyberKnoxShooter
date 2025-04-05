@@ -6,6 +6,7 @@ public class Ship : MonoBehaviour {
     float fVel;
     float fRotate;
     float fVelRotate;
+    float fSpeed;
 
     public GameObject BulletPrefab;
     public GameObject objLevel;
@@ -15,6 +16,7 @@ public class Ship : MonoBehaviour {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         fShootCooldown = 0f;
+        fSpeed = 20f;
         fVel = 0f;
         fRotate = 0f;
         fVelRotate = 0f;
@@ -36,7 +38,7 @@ public class Ship : MonoBehaviour {
         transform.localRotation = Quaternion.Euler(0f, fRotate, 0f);
         //transform.Translate(new Vector3(0f, 0f, Input.GetAxis("Vertical") * Time.deltaTime));
 
-        float fSpeed = 5f;
+        
         fVel = Input.GetAxis("Vertical") * fSpeed * Time.deltaTime;
         transform.position = transform.TransformPoint(0f, 0f, fVel);
 
@@ -44,7 +46,7 @@ public class Ship : MonoBehaviour {
             fShootCooldown -= Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.Space)) {
+        if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) {
             if (fShootCooldown <= 0f) {
                 shoot();
             }

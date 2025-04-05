@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Cyber Knox Shooter
+  m_text: 'Conway Shooter
 
     0x7E9'
   m_isRightToLeft: 0

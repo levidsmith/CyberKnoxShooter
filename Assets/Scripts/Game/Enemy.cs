@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour {
     private void takeDamage() {
         Destroy(gameObject);
         GameManager gamemanager = GameObject.FindAnyObjectByType<GameManager>();
-        gamemanager.checkLevelComplete();
+       // gamemanager.checkLevelComplete();
     }
 
 
