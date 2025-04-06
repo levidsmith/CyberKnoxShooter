@@ -17,16 +17,20 @@ public class GameManager : MonoBehaviour {
     float fGenerationTimeout;
     float fGenerationMaxTimeout;
 
+    public float fGameTime;
+
     public DisplayManager displaymanager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         Debug.Log("GameManager Start");
+        fGameTime = 0f;
         iLevel = 0;
         level.strName = datareader.getLevelName(iLevel);
         displaymanager.textLevelName.text = level.strName;
-        level.createLevel(datareader.getLevel(iLevel));
+        level.createLevel();
+        level.setupLevel(datareader.getLevel(iLevel));
         isCompleted = false;
-        fGenerationMaxTimeout = 5f;
+        fGenerationMaxTimeout = 0.5f;
         fGenerationTimeout = fGenerationMaxTimeout;
         
     }
@@ -34,10 +38,12 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (!isCompleted) {
-            Debug.Log("check level complete");
+            //Debug.Log("check level complete");
+            fGameTime += Time.deltaTime;
 
-            if (level.checkLevelComplete()) {
-                if (iLevel < datareader.textLevels.Count) {
+            isCompleted = level.checkLevelComplete();
+            if (isCompleted) {
+                if (iLevel < datareader.textLevels.Count - 1) {
                     gamemenu.showLevelComplete();
                 } else {
                     gamemenu.showGameComplete();
@@ -64,7 +70,7 @@ public class GameManager : MonoBehaviour {
         level.clearLevel();
         level.strName = datareader.getLevelName(iLevel);
         displaymanager.textLevelName.text = level.strName;
-        level.createLevel(datareader.getLevel(iLevel));
+        level.setupLevel(datareader.getLevel(iLevel));
         isCompleted = false;
         gamemenu.hideLevelComplete();
     }

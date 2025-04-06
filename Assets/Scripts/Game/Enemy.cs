@@ -2,9 +2,11 @@
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
+   // public bool isAlive;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
+//        isAlive = false;
         
     }
 
@@ -14,7 +16,8 @@ public class Enemy : MonoBehaviour {
     }
 
     private void takeDamage() {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
         GameManager gamemanager = GameObject.FindAnyObjectByType<GameManager>();
        // gamemanager.checkLevelComplete();
     }
@@ -29,6 +32,15 @@ public class Enemy : MonoBehaviour {
                 Destroy(bullet.gameObject);
             }
 
+        }
+    }
+
+    public void setAlive(bool b) {
+  //      isAlive = b;
+        if (b) {
+            gameObject.SetActive(true);
+        } else {
+            gameObject.SetActive(false);
         }
     }
 

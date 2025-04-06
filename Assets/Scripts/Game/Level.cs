@@ -11,7 +11,6 @@ public class Level : MonoBehaviour {
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
-        Debug.Log("Level Start");
 
 
     }
@@ -22,31 +21,43 @@ public class Level : MonoBehaviour {
     }
 
 
-    public void createLevel(bool[,] inLevelLayout) {
+    public void createLevel() {
         
 
         Ship ship = Instantiate(ShipPrefab, Vector3.zero, Quaternion.identity).GetComponent<Ship>();
         ship.transform.SetParent(this.transform);
 
 
-        levelLayout = inLevelLayout;
         levelEnemies = new Enemy[DataReader.LEVEL_ROWS, DataReader.LEVEL_COLS];
 
-        int iRows = DataReader.LEVEL_ROWS;
-        int iCols = DataReader.LEVEL_COLS;
+        int i, j;
+        for (i = 0; i < DataReader.LEVEL_ROWS; i++) {
+
+            for (j = 0; j < DataReader.LEVEL_COLS; j++) {
+                createEnemyAt(i, j);
+            }
+        }
+
+    }
+
+    public void setupLevel(bool[,] inLevelLayout) {
+
+        levelLayout = inLevelLayout;
 
         int i, j;
         for (i = 0; i < DataReader.LEVEL_ROWS; i++) {
 
             for (j = 0; j < DataReader.LEVEL_COLS; j++) {
                 if (levelLayout[i, j]) {
-                    createEnemyAt(i, j);
+                    levelEnemies[i, j].setAlive(true);
+                } else {
+                    levelEnemies[i, j].setAlive(false);
                 }
+
 
             }
         }
 
-        Debug.Log("level created");
     }
 
 
@@ -64,8 +75,7 @@ public class Level : MonoBehaviour {
         for (i = 0; i < DataReader.LEVEL_ROWS; i++) {
             for (j = 0; j < DataReader.LEVEL_COLS; j++) {
 
-
-                if (levelEnemies[i, j] != null) {
+                if (levelEnemies[i, j].gameObject.activeSelf) {
                     if (getNeighborCount(i, j) < 2) {
                         levelNextLayout[i, j] = false;
                     } else if (getNeighborCount(i, j) > 3) {
@@ -87,6 +97,15 @@ public class Level : MonoBehaviour {
 
         for (i = 0; i < DataReader.LEVEL_ROWS; i++) {
             for (j = 0; j < DataReader.LEVEL_COLS; j++) {
+                if (!levelEnemies[i, j].gameObject.activeSelf && levelNextLayout[i, j]) {
+                    levelEnemies[i, j].setAlive(true);
+                }
+
+                if (levelEnemies[i, j].gameObject.activeSelf && !levelNextLayout[i, j]) {
+                    levelEnemies[i, j].setAlive(false);
+                }
+
+                /*
                 if (levelEnemies[i,j] == null && levelNextLayout[i, j]) {
                     createEnemyAt(i, j);
                 }
@@ -94,6 +113,7 @@ public class Level : MonoBehaviour {
                 if (levelEnemies[i, j] != null && !levelNextLayout[i, j]) {
                     Destroy(levelEnemies[i, j].gameObject);
                 }
+                */
             }
         }
 
@@ -107,6 +127,7 @@ public class Level : MonoBehaviour {
 
             Enemy enemy = Instantiate(EnemyPrefab, vectOffset + new Vector3(j * 1f, 0f, i * -1f), Quaternion.identity).GetComponent<Enemy>();
             enemy.transform.SetParent(transform);
+            enemy.setAlive(false);
             levelEnemies[i, j] = enemy;
         }
     }
@@ -119,56 +140,55 @@ public class Level : MonoBehaviour {
 
         iMod = getCellRow(i - 1);
         jMod = getCellCol(j - 1);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
         iMod = getCellRow(i - 1);
         jMod = getCellCol(j);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
         iMod = getCellRow(i - 1);
         jMod = getCellCol(j + 1);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
         iMod = getCellRow(i);
         jMod = getCellCol(j - 1);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
         iMod = getCellRow(i);
         jMod = getCellCol(j + 1);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
 
         iMod = getCellRow(i + 1);
         jMod = getCellCol(j - 1);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
         iMod = getCellRow(i + 1);
         jMod = getCellCol(j);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
         iMod = getCellRow(i + 1);
         jMod = getCellCol(j + 1);
-        if (levelEnemies[iMod, jMod] != null) {
+        if (levelEnemies[iMod, jMod].gameObject.activeSelf) {
             iCount++;
         }
 
-        Debug.Log("neighbor count: " + iCount);
+        //Debug.Log("neighbor count: " + iCount);
 
-//        return 1;
         return iCount;
     }
 
@@ -192,24 +212,25 @@ public class Level : MonoBehaviour {
     public void clearLevel() {
         int i;
         for (i = 0; i < transform.childCount; i++) {
-            Destroy(transform.GetChild(i).gameObject);
+            //Destroy(transform.GetChild(i).gameObject);
+            foreach (Enemy enemy in levelEnemies) {
+                enemy.setAlive(false);
+            }
         }
     }
 
     public bool checkLevelComplete() {
-        Enemy[] enemyArray = GetComponentsInChildren<Enemy>();
+        //        Enemy[] enemyArray = GetComponentsInChildren<Enemy>();
 
         //        Debug.Log("CheckLevelComplete: " + enemyArray.Length);
-
-
-
-
-        if (enemyArray.Length == 0) {
-            Debug.Log("Level Completed");
-            return true;
-
+        
+        foreach (Enemy enemy in levelEnemies) {
+//            Debug.Log("enemy isAlive: " + enemy.gameObject.activeSelf);
+            if (enemy.isActiveAndEnabled) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
 
