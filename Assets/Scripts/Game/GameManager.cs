@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour {
             Debug.Log("check level complete");
 
             if (level.checkLevelComplete()) {
-                if (iLevel < 2) {
+                if (iLevel < datareader.textLevels.Count) {
                     gamemenu.showLevelComplete();
                 } else {
                     gamemenu.showGameComplete();
