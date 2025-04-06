@@ -2,11 +2,15 @@
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
-   // public bool isAlive;
+    // public bool isAlive;
+    public AudioSource soundHit;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
-//        isAlive = false;
+        //        isAlive = false;
+
+        //should clean this up later
+        soundHit = GameObject.Find("SoundEffects/SoundBoxHit").GetComponent<AudioSource>();
         
     }
 
@@ -19,6 +23,7 @@ public class Enemy : MonoBehaviour {
         //Destroy(gameObject);
         gameObject.SetActive(false);
         GameManager gamemanager = GameObject.FindAnyObjectByType<GameManager>();
+        soundHit.Play();
        // gamemanager.checkLevelComplete();
     }
 

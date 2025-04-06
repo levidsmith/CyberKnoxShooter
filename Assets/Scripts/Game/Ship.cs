@@ -13,6 +13,8 @@ public class Ship : MonoBehaviour {
     float fShootCooldown;
     float fMaxShootCooldown;
 
+    public AudioSource soundShoot;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         fShootCooldown = 0f;
@@ -85,6 +87,7 @@ public class Ship : MonoBehaviour {
         bullet.transform.eulerAngles = transform.eulerAngles;
         bullet.transform.SetParent(objLevel.transform);
         fShootCooldown = fMaxShootCooldown;
+        soundShoot.Play();
 
 
     }

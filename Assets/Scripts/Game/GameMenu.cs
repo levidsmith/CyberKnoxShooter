@@ -9,6 +9,8 @@ public class GameMenu : MonoBehaviour {
     public GameObject PanelGameComplete;
     public TMP_Text textGameCompletedTime;
 
+    public AudioSource soundWin;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         
@@ -26,6 +28,7 @@ public class GameMenu : MonoBehaviour {
 
     public void showLevelComplete() {
         PanelLevelComplete.SetActive(true);
+        soundWin.Play();
 
     }
 
@@ -42,6 +45,7 @@ public class GameMenu : MonoBehaviour {
         int iSeconds = Mathf.FloorToInt(gamemanager.fGameTime);
         textGameCompletedTime.text = string.Format("Time {0:0}:{1:00}", iSeconds / 60, iSeconds % 60);
         PanelGameComplete.SetActive(true);
+        soundWin.Play();
 
     }
 
