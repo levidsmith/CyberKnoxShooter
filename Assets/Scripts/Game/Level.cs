@@ -42,6 +42,10 @@ public class Level : MonoBehaviour {
 
     public void setupLevel(bool[,] inLevelLayout) {
 
+        Ship ship = GameObject.FindAnyObjectByType<Ship>();
+        ship.transform.position = Vector3.zero;
+        ship.transform.eulerAngles = Vector3.zero;
+
         levelLayout = inLevelLayout;
 
         int i, j;
@@ -57,6 +61,8 @@ public class Level : MonoBehaviour {
 
             }
         }
+
+        
 
     }
 
@@ -211,11 +217,16 @@ public class Level : MonoBehaviour {
 
     public void clearLevel() {
         int i;
-        for (i = 0; i < transform.childCount; i++) {
+//        for (i = 0; i < transform.childCount; i++) {
             //Destroy(transform.GetChild(i).gameObject);
             foreach (Enemy enemy in levelEnemies) {
                 enemy.setAlive(false);
             }
+        //      }
+
+        Bullet[] bullets = GetComponentsInChildren<Bullet>();
+        foreach (Bullet bullet in bullets) {
+            Destroy(bullet.gameObject);
         }
     }
 

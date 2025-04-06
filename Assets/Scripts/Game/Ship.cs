@@ -42,6 +42,30 @@ public class Ship : MonoBehaviour {
         fVel = Input.GetAxis("Vertical") * fSpeed * Time.deltaTime;
         transform.position = transform.TransformPoint(0f, 0f, fVel);
 
+        float xBounds, zBounds;
+        float x, z; 
+        xBounds = 32f;
+        zBounds = 32;
+
+        x = transform.position.x;
+        z = transform.position.z;
+        if (x > xBounds) {
+            x -= 2 * xBounds;
+        } else if (x < -xBounds) {
+            x += 2 * xBounds;
+        }
+        if (z > zBounds) {
+            z -= 2 * zBounds;
+        } else if (z < -zBounds) {
+            z += 2 * zBounds;
+        }
+
+        transform.position = new Vector3(x, 0f, z);
+
+
+
+
+
         if (fShootCooldown > 0f) {
             fShootCooldown -= Time.deltaTime;
         }

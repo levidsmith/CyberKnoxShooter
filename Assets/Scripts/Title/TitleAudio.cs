@@ -16,7 +16,6 @@ public class TitleAudio : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         float fTimeNext = fTime + Time.deltaTime;
-        Debug.Log("time: " + fTime + " Next: "+ fTimeNext);
 
         if (fTime < 1f && fTimeNext >= 1f) {
             Debug.Log("play title voice");

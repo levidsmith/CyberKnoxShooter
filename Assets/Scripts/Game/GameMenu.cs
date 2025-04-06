@@ -40,7 +40,7 @@ public class GameMenu : MonoBehaviour {
 
     public void showGameComplete() {
         int iSeconds = Mathf.FloorToInt(gamemanager.fGameTime);
-        textGameCompletedTime.text = string.Format("{0:0}:{1:00}", iSeconds / 60, iSeconds % 60);
+        textGameCompletedTime.text = string.Format("Time {0:0}:{1:00}", iSeconds / 60, iSeconds % 60);
         PanelGameComplete.SetActive(true);
 
     }
